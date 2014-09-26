@@ -1,0 +1,6 @@
+---
+- hosts: bind-master
+  vars:
+    colo: idc2
+  roles:
+  - bind

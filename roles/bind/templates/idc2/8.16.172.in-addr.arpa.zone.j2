@@ -1,0 +1,17 @@
+;{{ ansible_managed }}
+$ORIGIN .
+$TTL 86400	; 1 day
+8.16.172.in-addr.arpa	IN SOA	ns1.heylinux.com. root.heylinux.com. (
+				{{ ansible_dns_new_serial_number['8.16.172.in-addr.arpa'] }} ; serial
+				3600       ; refresh (1 hour)
+				60         ; retry (1 minute)
+				604800     ; expire (1 week)
+				3600       ; minimum (1 hour)
+				)
+			NS	ns1.heylinux.com.
+			A	255.255.255.0
+			PTR	heylinux.com.
+$ORIGIN 8.16.172.in-addr.arpa.
+{% for name, addr in ptr_8_16_172.iteritems() %}
+{{ name }}			PTR	{{ addr }}
+{% endfor %}

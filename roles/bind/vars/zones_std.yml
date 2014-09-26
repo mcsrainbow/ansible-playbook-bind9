@@ -1,0 +1,4 @@
+---
+standard_zones:
+  - domain: heylinux.com
+    file: heylinux.com.zone

@@ -1,0 +1,104 @@
+//
+// named.conf
+//
+// Provided by Red Hat bind package to configure the ISC BIND named(8) DNS
+// server as a caching only nameserver (as a localhost DNS resolver only).
+//
+// See /usr/share/doc/bind*/sample/ for example named configuration files.
+//
+
+include "/etc/rndc.key";
+include "/var/named/heylinux.com.key";
+
+controls {
+        inet 127.0.0.1 allow { localhost; } keys { "rndc-key"; };
+};
+
+acl slave_servers { 172.16.8.247; };
+
+options {
+	#listen-on port 53 { 127.0.0.1; };
+	#listen-on-v6 port 53 { ::1; };
+        listen-on-v6 { none; };
+	directory 	"/var/named";
+	dump-file 	"/var/named/data/cache_dump.db";
+        statistics-file "/var/named/data/named_stats.txt";
+        memstatistics-file "/var/named/data/named_mem_stats.txt";
+	allow-query     { any; };
+        allow-transfer  { slave_servers; };
+        also-notify     { 172.16.8.247; };
+	recursion yes;
+
+	dnssec-enable yes;
+	dnssec-validation yes;
+	dnssec-lookaside auto;
+
+	/* Path to ISC DLV key */
+	bindkeys-file "/etc/named.iscdlv.key";
+
+	managed-keys-directory "/var/named/dynamic";
+};
+
+logging {
+    channel default_file { file "/var/log/named/default.log" versions 3 size 5m; severity dynamic; print-time yes; };
+    channel general_file { file "/var/log/named/general.log" versions 3 size 5m; severity dynamic; print-time yes; };
+    channel database_file { file "/var/log/named/database.log" versions 3 size 5m; severity dynamic; print-time yes; };
+    channel security_file { file "/var/log/named/security.log" versions 3 size 5m; severity dynamic; print-time yes; };
+    channel config_file { file "/var/log/named/config.log" versions 3 size 5m; severity dynamic; print-time yes; };
+    channel resolver_file { file "/var/log/named/resolver.log" versions 3 size 5m; severity dynamic; print-time yes; };
+    channel xfer-in_file { file "/var/log/named/xfer-in.log" versions 3 size 5m; severity dynamic; print-time yes; };
+    channel xfer-out_file { file "/var/log/named/xfer-out.log" versions 3 size 5m; severity dynamic; print-time yes; };
+    channel notify_file { file "/var/log/named/notify.log" versions 3 size 5m; severity dynamic; print-time yes; };
+    channel client_file { file "/var/log/named/client.log" versions 3 size 5m; severity dynamic; print-time yes; };
+    channel unmatched_file { file "/var/log/named/unmatched.log" versions 3 size 5m; severity dynamic; print-time yes; };
+    channel queries_file { file "/var/log/named/queries.log" versions 3 size 5m; severity dynamic; print-time yes; };
+    channel network_file { file "/var/log/named/network.log" versions 3 size 5m; severity dynamic; print-time yes; };
+    channel update_file { file "/var/log/named/update.log" versions 3 size 5m; severity dynamic; print-time yes; };
+    channel dispatch_file { file "/var/log/named/dispatch.log" versions 3 size 5m; severity dynamic; print-time yes; };
+    channel dnssec_file { file "/var/log/named/dnssec.log" versions 3 size 5m; severity dynamic; print-time yes; };
+    channel lame-servers_file { file "/var/log/named/lame-servers.log" versions 3 size 5m; severity dynamic; print-time yes; };
+
+    category default { default_file; };
+    category general { general_file; };
+    category database { database_file; };
+    category security { security_file; };
+    category config { config_file; };
+    category resolver { resolver_file; };
+    category xfer-in { xfer-in_file; };
+    category xfer-out { xfer-out_file; };
+    category notify { notify_file; };
+    category client { client_file; };
+    category unmatched { unmatched_file; };
+    category queries { queries_file; };
+    category network { network_file; };
+    category update { update_file; };
+    category dispatch { dispatch_file; };
+    category dnssec { dnssec_file; };
+    category lame-servers { lame-servers_file; };
+};
+
+view "internal_resolver" {
+        match-clients {
+                localhost;
+                172.16.8.0/24;
+        };
+
+        zone "." IN {
+        	type hint;
+        	file "named.ca";
+        };
+
+        zone "heylinux.com" IN {
+                type master;
+                file "heylinux.com.zone";
+                allow-update { key "heylinux.com."; };
+        };
+
+        zone "8.16.172.in-addr.arpa" IN {
+                type master;
+                file "8.16.172.in-addr.arpa.zone";
+                allow-update { key "heylinux.com."; };
+        };
+
+        include "/etc/named.rfc1912.zones";
+};

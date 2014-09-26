@@ -1,0 +1,74 @@
+---
+- name: install needed rpm packages
+  yum: name={{ item }} state=present
+  with_items:
+  - bind
+  - bind-devel
+  - bind-libs
+  - bind-utils
+  - bind-chroot
+  tags:
+  - bind
+
+- name: create dirs for logs
+  file: path={{ item }} state=directory owner=named group=named mode=0755
+  with_items:
+  - /var/named/chroot/var/log/named
+  tags:
+  - bind
+  - bind-base
+
+- name: create files for logs
+  file: path=/var/named/chroot/var/log/named/{{ item }} owner=named group=named mode=0644
+  with_items:
+  - client.log
+  - config.log
+  - database.log
+  - default.log
+  - dispatch.log
+  - dnssec.log
+  - general.log
+  - lame-servers.log
+  - network.log
+  - notify.log
+  - queries.log
+  - resolver.log
+  - security.log
+  - unmatched.log
+  - update.log
+  - xfer-in.log
+  - xfer-out.log
+  tags:
+  - bind
+  - bind-base
+
+- name: update attributes for /var/named
+  file: path={{ item }} state=directory owner=named group=named mode=0750
+  with_items:
+  - /var/named
+  tags:
+  - bind
+  - bind-base
+
+- name: create named.conf configuration file
+  template: src={{ colo }}/named.conf.j2 dest=/etc/named.conf owner=root group=named mode=0640
+  tags:
+  - bind
+  - bind-base
+
+- name: create key configuration file
+  copy: src={{ colo }}/named/{{ item }} dest=/var/named/{{ item }} owner=named group=named mode=0640
+  with_items:
+  - heylinux.com.key
+  tags:
+  - bind
+  - bind-base
+
+- name: create key files
+  copy: src={{ colo }}/named/{{ item }} dest=/var/named/{{ item }} owner=named group=named mode=0600
+  with_items:
+  - Kheylinux.com.+157+59510.key
+  - Kheylinux.com.+157+59510.private
+  tags:
+  - bind
+  - bind-base

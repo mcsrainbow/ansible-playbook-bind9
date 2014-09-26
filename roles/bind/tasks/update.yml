@@ -1,0 +1,48 @@
+---
+- name: get zones and A,CNAME records
+  include_vars: "{{ item }}"
+  with_items:
+  - "roles/bind/vars/zones_all.yml"
+  - "roles/bind/vars/zones_std.yml"
+  - "roles/bind/vars/zones_rvs.yml"
+  - "roles/bind/vars/A.yml"
+  - "roles/bind/vars/CNAME.yml"
+  tags:
+  - bind
+  - bind-update
+
+- name: get PTR records
+  include_vars: "roles/bind/vars/{{ item.domain }}.yml"
+  with_items:
+  - "{{ reverse_zones }}"
+  tags:
+  - bind
+  - bind-update
+
+- name: get ansible_dns_new_serial_number of all zones
+  myfacts: domain_names={{ all_zones_list|join(',') }}
+  tags:
+  - bind
+  - bind-update
+
+- name: create zones configuration files
+  template: src={{ colo }}/{{ item.file }}.j2 dest=/var/named/{{ item.file }} owner=named group=named mode=0644
+  with_items:
+  - "{{ standard_zones }}"
+  tags:
+  - bind
+  - bind-update
+
+- name: create reverse zones configuration files
+  template: src={{ colo }}/{{ item.file }}.j2 dest=/var/named/{{ item.file }} owner=named group=named mode=0644
+  with_items:
+  - "{{ reverse_zones }}"
+  tags:
+  - bind
+  - bind-update
+
+- name: relaod rndc service to load new records
+  shell: rndc freeze && rndc reload && rndc thaw
+  tags:
+  - bind
+  - bind-update

@@ -1,0 +1,22 @@
+;{{ ansible_managed }}
+$ORIGIN .
+$TTL 86400	; 1 day
+heylinux.com		IN SOA	ns1.heylinux.com. root.heylinux.com. (
+				{{ ansible_dns_new_serial_number['heylinux.com'] }} ; serial
+				300        ; refresh (5 minutes)
+				60         ; retry (1 minute)
+				604800     ; expire (1 week)
+				3600       ; minimum (1 hour)
+				)
+			NS	ns1.heylinux.com.
+			NS	ns2.heylinux.com.
+			A	54.238.131.140
+			MX	5 mxbiz1.qq.com.
+			MX	10 mxbiz2.qq.com.
+$ORIGIN heylinux.com.
+{% for name, addr in A.iteritems() %}
+{{ name }}			A	{{ addr }}
+{% endfor %}
+{% for name, addr in CNAME.iteritems() %}
+{{ name }}			CNAME	{{ addr }}.
+{% endfor %}

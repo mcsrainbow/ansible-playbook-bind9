@@ -1,0 +1,34 @@
+#!/usr/bin/python
+
+import sys
+import json
+import shlex
+import commands
+import re
+
+def get_ansible_dns_new_serial_number(domain_name):
+    serial_number = commands.getoutput("""dig soa %s | grep -A1 'ANSWER SECTION' | tail -n 1 | awk '{print $7}'""" % (domain_name))
+    ansible_dns_new_serial_number = int(serial_number) + 1
+    return ansible_dns_new_serial_number
+
+ansible_facts_dict = {
+        "changed" : False,
+        "ansible_facts": {
+                "ansible_dns_new_serial_number": {}
+            }
+    }
+
+args_file = sys.argv[1]
+args_data = file(args_file).read()
+
+arguments = shlex.split(args_data)
+for arg in arguments:
+    if "=" in arg:
+        (key, value) = arg.split("=")
+        if key == "domain_names":
+            domain_names_list = value.split(",")
+            for domain_name in domain_names_list:
+                ansible_dns_new_serial_number = get_ansible_dns_new_serial_number(domain_name)
+                ansible_facts_dict['ansible_facts']['ansible_dns_new_serial_number'][domain_name] = ansible_dns_new_serial_number
+
+print json.dumps(ansible_facts_dict)
