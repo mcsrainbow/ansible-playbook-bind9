@@ -2,6 +2,7 @@
 
 # DNS records management tool for YAML Files in Ansible
 # By Dong Guo at 20140926
+
 basedir=$(dirname ${0})
 domain=heylinux.com
 
