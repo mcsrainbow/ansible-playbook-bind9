@@ -9,6 +9,7 @@
   - bind-chroot
   tags:
   - bind
+  - bind-base
 
 - name: create dirs for logs
   file: path={{ item }} state=directory owner=named group=named mode=0755
