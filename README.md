@@ -114,7 +114,7 @@ ptr_8_16_172:
 
 ### Then we can `Push the New Records` to DNS masters:
 ```
-[dong@idc2-admin1 ansible]$ ansroot idc2-bind-master.yml -i hosts.idc2 --tags bind-update
+[dong@idc2-admin1 ansible]$ ansible-playbook idc2-bind-master.yml -i hosts -u root -k --tags bind-update
 PLAY [bind-master] ************************************************************
 
 GATHERING FACTS ***************************************************************
