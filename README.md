@@ -88,8 +88,11 @@ CNAME:
   ns7: ns6.heylinux.com
 ```
 
-#### Checks if give wrong IP address or the sub network doesnt exist:
+#### Check if give wrong IP address or the sub network doesnt exist:
 ```
+[dong@idc2-admin1 ansible]$ roles/bind/vars/dns_ops.sh -t PTR -u add -n ns6 -v 172.16.8.251
+'ns6' is malformed. Should be a IP address
+
 [dong@idc2-admin1 ansible]$ roles/bind/vars/dns_ops.sh -t PTR -u add -n 172.168.8.251 -v ns6.heylinux.com
 8.168.172.in-addr.arpa.yml does not exist
 ```
