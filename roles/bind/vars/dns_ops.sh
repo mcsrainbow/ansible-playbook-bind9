@@ -126,7 +126,7 @@ else
         domain=$c.$b.$a.in-addr.arpa
         servername=$d
         if [ ! -f ${basedir}/${domain}.yml ]; then
-          echo ${domain}.yml does not exist
+          echo "${domain}.yml does not exist"
           exit 1 
         else
           update_record
