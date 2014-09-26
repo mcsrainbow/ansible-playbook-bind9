@@ -9,7 +9,7 @@
  
 ### Here is the script `dns_ops.sh`:
 ```
-[dong@sc2-admin1001 ansible]$ roles/bind/vars/dns_ops.sh
+[dong@idc2-admin1 ansible]$ roles/bind/vars/dns_ops.sh
 Examples:
 roles/bind/vars/dns_ops.sh -t A -u add -n ns1 -v 172.16.8.246
 roles/bind/vars/dns_ops.sh -t A -u del -n ns1 -v 172.16.8.246
@@ -22,39 +22,39 @@ roles/bind/vars/dns_ops.sh -t PTR -u del -n 172.16.8.246 -v ns1.heylinux.com
 ### Here are some practices:
 #### Check if the name contain the top level domain:
 ```
-[dong@sc2-admin1001 ansible]$ roles/bind/vars/dns_ops.sh -t A -u add -n ns6.heylinux.com -v 172.16.8.251
+[dong@idc2-admin1 ansible]$ roles/bind/vars/dns_ops.sh -t A -u add -n ns6.heylinux.com -v 172.16.8.251
 'ns6.heylinux.com' is malformed. Servername should be just 'ns6' without the 'heylinux.com'
 ```
 
 #### Check the duplicate record:
 ```
-[dong@sc2-admin1001 ansible]$ roles/bind/vars/dns_ops.sh -t A -u add -n ns6 -v 172.16.8.251
+[dong@idc2-admin1 ansible]$ roles/bind/vars/dns_ops.sh -t A -u add -n ns6 -v 172.16.8.251
 Failed because duplicate record: 'ns6: 172.16.8.253'
 ```
 
 #### Check if the value doesnt match:
 ```
-[dong@sc2-admin1001 ansible]$ roles/bind/vars/dns_ops.sh -t A -u del -n ns6 -v 172.16.8.251
+[dong@idc2-admin1 ansible]$ roles/bind/vars/dns_ops.sh -t A -u del -n ns6 -v 172.16.8.251
 Failed because the existing record's value doesnt match: 'ns6: 172.16.8.253'
 ```
 
 #### Delete a record:
 ```
-[dong@sc2-admin1001 ansible]$ roles/bind/vars/dns_ops.sh -t A -u del -n ns6 -v 172.16.8.253
+[dong@idc2-admin1 ansible]$ roles/bind/vars/dns_ops.sh -t A -u del -n ns6 -v 172.16.8.253
 Updated A records in A.yml: delete 'ns6: 172.16.8.253'
 You may need to push via Ansible to update the records on DNS Servers
 ```
 
 #### Add a record:
 ```
-[dong@sc2-admin1001 ansible]$ roles/bind/vars/dns_ops.sh -t A -u add -n ns6 -v 172.16.8.251
+[dong@idc2-admin1 ansible]$ roles/bind/vars/dns_ops.sh -t A -u add -n ns6 -v 172.16.8.251
 Updated A records in A.yml: add 'ns6: 172.16.8.251'
 You may need to push via Ansible to update the records on DNS Servers
 ```
 
 #### View the YAML data file which just updated by the script dns_ops.sh:
 ```
-[dong@sc2-admin1001 ansible]$ cat roles/bind/vars/A.yml
+[dong@idc2-admin1 ansible]$ cat roles/bind/vars/A.yml
 ---
 A:
   ns1: 172.16.8.246
@@ -62,7 +62,7 @@ A:
   ns4: 172.16.8.249
   ns6: 172.16.8.251
 
-[dong@sc2-admin1001 ansible]$ cat roles/bind/vars/CNAME.yml
+[dong@idc2-admin1 ansible]$ cat roles/bind/vars/CNAME.yml
 ---
 CNAME:
   www: heylinux.com
@@ -72,14 +72,14 @@ CNAME:
 
 #### Add a CNAME record:
 ```
-[dong@sc2-admin1001 ansible]$ roles/bind/vars/dns_ops.sh -t CNAME -u add -n ns7 -v ns6.heylinux.com
+[dong@idc2-admin1 ansible]$ roles/bind/vars/dns_ops.sh -t CNAME -u add -n ns7 -v ns6.heylinux.com
 Updated CNAME records in CNAME.yml: add 'ns7: ns6.heylinux.com'
 You may need to push via Ansible to update the records on DNS Servers
 ```
 
 #### View the YAML data file which just updated by the script dns_ops.sh:
 ```
-[dong@sc2-admin1001 ansible]$ cat roles/bind/vars/CNAME.yml
+[dong@idc2-admin1 ansible]$ cat roles/bind/vars/CNAME.yml
 ---
 CNAME:
   www: heylinux.com
@@ -90,20 +90,20 @@ CNAME:
 
 #### Checks if give wrong IP address or the sub network doesnt exist:
 ```
-[dong@sc2-admin1001 ansible]$ roles/bind/vars/dns_ops.sh -t PTR -u add -n 172.168.8.251 -v ns6.heylinux.com
+[dong@idc2-admin1 ansible]$ roles/bind/vars/dns_ops.sh -t PTR -u add -n 172.168.8.251 -v ns6.heylinux.com
 8.168.172.in-addr.arpa.yml does not exist
 ```
 
 #### Add a PTR record:
 ```
-[dong@sc2-admin1001 ansible]$ roles/bind/vars/dns_ops.sh -t PTR -u add -n 172.16.8.251 -v ns6.heylinux.com
+[dong@idc2-admin1 ansible]$ roles/bind/vars/dns_ops.sh -t PTR -u add -n 172.16.8.251 -v ns6.heylinux.com
 Updated PTR records in 8.16.172.in-addr.arpa.yml: add '251: ns6.heylinux.com'
 You may need to push via Ansible to update the records on DNS Servers
 ```
 
 #### View the YAML data file which just updated by the script dns_ops.sh:
 ```
-[dong@sc2-admin1001 ansible]$ cat roles/bind/vars/8.16.172.in-addr.arpa.yml
+[dong@idc2-admin1 ansible]$ cat roles/bind/vars/8.16.172.in-addr.arpa.yml
 ---
 ptr_8_16_172:
   247: ns2.heylinux.com
@@ -114,7 +114,7 @@ ptr_8_16_172:
 
 ### Then we can `Push the New Records` to DNS masters:
 ```
-[dong@sc2-admin1001 ansible]$ ansroot idc2-bind-master.yml -i hosts.idc2 --tags bind-update
+[dong@idc2-admin1 ansible]$ ansroot idc2-bind-master.yml -i hosts.idc2 --tags bind-update
 PLAY [bind-master] ************************************************************
 
 GATHERING FACTS ***************************************************************
