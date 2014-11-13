@@ -20,6 +20,30 @@
   - bind-base
 
 - name: create files for logs
+  shell: creates=/var/named/chroot/var/log/named/{{ item }} touch /var/named/chroot/var/log/named/{{ item }}
+  with_items:
+  - client.log
+  - config.log
+  - database.log
+  - default.log
+  - dispatch.log
+  - dnssec.log
+  - general.log
+  - lame-servers.log
+  - network.log
+  - notify.log
+  - queries.log
+  - resolver.log
+  - security.log
+  - unmatched.log
+  - update.log
+  - xfer-in.log
+  - xfer-out.log
+  tags:
+  - bind 
+  - bind-base
+
+- name: create files for logs
   file: path=/var/named/chroot/var/log/named/{{ item }} owner=named group=named mode=0644
   with_items:
   - client.log
