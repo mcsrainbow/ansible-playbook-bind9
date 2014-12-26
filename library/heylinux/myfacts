@@ -1,8 +1,6 @@
 #!/usr/bin/python
 
-import sys
 import json
-import shlex
 import commands
 import re
 
@@ -11,24 +9,32 @@ def get_ansible_dns_new_serial_number(domain_name):
     ansible_dns_new_serial_number = int(serial_number) + 1
     return ansible_dns_new_serial_number
 
-ansible_facts_dict = {
+def main():
+    global module
+    module = AnsibleModule(
+        argument_spec = dict(
+            get_facts=dict(default="yes", required=False),
+            domain_names=dict(required=False),
+        ),
+        supports_check_mode = True,
+    )
+
+    ansible_facts_dict = {
         "changed" : False,
         "ansible_facts": {
                 "ansible_dns_new_serial_number": {}
             }
     }
 
-args_file = sys.argv[1]
-args_data = file(args_file).read()
-
-arguments = shlex.split(args_data)
-for arg in arguments:
-    if "=" in arg:
-        (key, value) = arg.split("=")
-        if key == "domain_names":
-            domain_names_list = value.split(",")
+    if module.params['get_facts'] == 'yes':
+        if module.params['domain_names']:
+            domain_names_list = module.params['domain_names'].split(",")
             for domain_name in domain_names_list:
                 ansible_dns_new_serial_number = get_ansible_dns_new_serial_number(domain_name)
                 ansible_facts_dict['ansible_facts']['ansible_dns_new_serial_number'][domain_name] = ansible_dns_new_serial_number
 
-print json.dumps(ansible_facts_dict)
+    print json.dumps(ansible_facts_dict)
+
+from ansible.module_utils.basic import *
+from ansible.module_utils.facts import *
+main()
