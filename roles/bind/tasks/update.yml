@@ -20,7 +20,7 @@
   - bind-update
 
 - name: get ansible_dns_new_serial_number of all zones
-  myfacts: domain_names={{ all_zones_list|join(',') }}
+  myfacts: domain_names={{ all_zones_list|join(',') }} get_facts=yes
   tags:
   - bind
   - bind-update
