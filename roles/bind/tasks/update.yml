@@ -2,17 +2,17 @@
 - name: get zones and A,CNAME records
   include_vars: "{{ item }}"
   with_items:
-  - "roles/bind/vars/zones_all.yml"
-  - "roles/bind/vars/zones_std.yml"
-  - "roles/bind/vars/zones_rvs.yml"
-  - "roles/bind/vars/A.yml"
-  - "roles/bind/vars/CNAME.yml"
+  - "zones_all.yml"
+  - "zones_std.yml"
+  - "zones_rvs.yml"
+  - "A.yml"
+  - "CNAME.yml"
   tags:
   - bind
   - bind-update
 
 - name: get PTR records
-  include_vars: "roles/bind/vars/{{ item.domain }}.yml"
+  include_vars: "{{ item.domain }}.yml"
   with_items:
   - "{{ reverse_zones }}"
   tags:
