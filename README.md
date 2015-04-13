@@ -124,11 +124,11 @@ GATHERING FACTS ***************************************************************
 ok: [idc2-dong1]
 
 TASK: [bind | get zones and A,CNAME records] **********************************
-ok: [idc2-dong1] => (item=roles/bind/vars/zones_all.yml)
-ok: [idc2-dong1] => (item=roles/bind/vars/zones_std.yml)
-ok: [idc2-dong1] => (item=roles/bind/vars/zones_rvs.yml)
-ok: [idc2-dong1] => (item=roles/bind/vars/A.yml)
-ok: [idc2-dong1] => (item=roles/bind/vars/CNAME.yml)
+ok: [idc2-dong1] => (item=zones_all.yml)
+ok: [idc2-dong1] => (item=zones_std.yml)
+ok: [idc2-dong1] => (item=zones_rvs.yml)
+ok: [idc2-dong1] => (item=A.yml)
+ok: [idc2-dong1] => (item=CNAME.yml)
 
 TASK: [bind | get PTR records] ************************************************
 ok: [idc2-dong1] => (item={'domain': '8.16.172.in-addr.arpa', 'file': '8.16.172.in-addr.arpa.zone'})
