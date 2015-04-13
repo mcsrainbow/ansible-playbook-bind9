@@ -158,6 +158,6 @@ ns6.heylinux.com has address 172.16.8.251
 ns7.heylinux.com is an alias for ns6.heylinux.com.
 ns6.heylinux.com has address 172.16.8.251
 
-[root@idc2-dong1 named]# dig -x 172.16.8.251
+[root@idc2-dong1 named]# host 172.16.8.251
 251.8.16.172.in-addr.arpa domain name pointer ns6.heylinux.com.
 ```
