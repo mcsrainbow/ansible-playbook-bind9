@@ -159,27 +159,5 @@ ns7.heylinux.com is an alias for ns6.heylinux.com.
 ns6.heylinux.com has address 172.16.8.251
 
 [root@idc2-dong1 named]# dig -x 172.16.8.251
-
-; <<>> DiG 9.8.2rc1-RedHat-9.8.2-0.23.rc1.el6_5.1 <<>> -x 172.16.8.251
-;; global options: +cmd
-;; Got answer:
-;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 33894
-;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 1, ADDITIONAL: 1
-
-;; QUESTION SECTION:
-;251.8.16.172.in-addr.arpa.     IN      PTR
-
-;; ANSWER SECTION:
-251.8.16.172.in-addr.arpa. 86400 IN     PTR     ns6.heylinux.com.8.16.172.in-addr.arpa.
-
-;; AUTHORITY SECTION:
-8.16.172.in-addr.arpa.  86400   IN      NS      ns1.heylinux.com.
-
-;; ADDITIONAL SECTION:
-ns1.heylinux.com.       86400   IN      A       172.16.8.246
-
-;; Query time: 1 msec
-;; SERVER: 172.16.8.246#53(172.16.8.246)
-;; WHEN: Fri Sep 26 03:57:40 2014
-;; MSG SIZE  rcvd: 120
+251.8.16.172.in-addr.arpa domain name pointer ns6.heylinux.com.
 ```
