@@ -41,7 +41,7 @@
   - bind
   - bind-update
 
-- name: relaod rndc service to load new records
+- name: reload rndc service to load new records
   shell: rndc freeze && rndc reload && rndc thaw
   tags:
   - bind
