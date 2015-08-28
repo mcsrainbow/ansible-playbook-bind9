@@ -142,7 +142,7 @@ changed: [idc2-dong1] => (item={'domain': 'heylinux.com', 'file': 'heylinux.com.
 TASK: [bind | create reverse zones configuration files] ***********************
 changed: [idc2-dong1] => (item={'domain': '8.16.172.in-addr.arpa', 'file': '8.16.172.in-addr.arpa.zone'})
 
-TASK: [bind | relaod rndc service to load new records] ************************
+TASK: [bind | reload rndc service to load new records] ************************
 changed: [idc2-dong1]
 
 PLAY RECAP ********************************************************************
