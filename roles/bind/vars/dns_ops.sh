@@ -20,7 +20,7 @@ function print_help(){
 
 function check_servername(){
   echo $servername | grep -wq ${domain}
-  if [ $? -eq 0 ]; then
+  if [[ $? -eq 0 ]]; then
     hostname=$(echo $servername | cut -d. -f1)
     echo "'${servername}' is malformed. Servername should be just '${hostname}' without the '${domain}'"
     exit 1
@@ -29,35 +29,35 @@ function check_servername(){
 
 function check_fqdn(){
   echo $record_value | grep -q '\.'
-  if [ $? -ne 0 ]; then
+  if [[ $? -ne 0 ]]; then
     echo "'${record_value}' is malformed. Should be a FQDN"
     exit 1
   fi 
 }
 
 function update_record(){
-  if [ ${record_type} == "PTR" ]; then
+  if [[ ${record_type} == "PTR" ]]; then
     filename=$domain
   else
     filename=$record_type
   fi
-  if [ $action == "add" ]; then
+  if [[ $action == "add" ]]; then
     grep -wq "$servername:" ${basedir}/${filename}.yml
-    if [ $? -eq 0 ]; then
+    if [[ $? -eq 0 ]]; then
       echo "Failed because duplicate record: '$(grep -w "$servername:" ${basedir}/${filename}.yml|awk '{print $1" "$2}')'"
       exit 1
     else
       echo "  $servername: $record_value" >> ${basedir}/${filename}.yml
     fi
   fi
-  if [ $action == "delete" ]; then
+  if [[ $action == "delete" ]]; then
     grep -wq "$servername:" ${basedir}/${filename}.yml
     if [ $? -ne 0 ]; then
       echo "Failed because nonexistent record"
       exit 1
     else
       grep -w "$servername:" ${basedir}/${filename}.yml | grep -wq "${record_value}"
-      if [ $? -ne 0 ]; then
+      if [[ $? -ne 0 ]]; then
         echo "Failed because the existing record's value doesnt match: '$(grep -w "$servername:" ${basedir}/${filename}.yml|awk '{print $1" "$2}')'"
         exit 1
       else
@@ -90,7 +90,7 @@ do
   esac
 done
 
-if [ -z "$record_type" ] || [ -z "$action" ] || [ -z "$servername" ] || [ -z "$record_value" ]; then
+if [[ -z "$record_type" ]] || [[ -z "$action" ]] || [[ -z "$servername" ]] || [[ -z "$record_value" ]]; then
   print_help
 else
   case "$action" in 
@@ -120,12 +120,12 @@ else
       b=$(echo $servername |cut -d. -f2 |grep -Ev '[a-z]|[A-Z]')
       c=$(echo $servername |cut -d. -f3 |grep -Ev '[a-z]|[A-Z]')
       d=$(echo $servername |cut -d. -f4 |grep -Ev '[a-z]|[A-Z]')
-      if [ -z "$a" ] || [ -z "$b" ] || [ -z "$c" ] || [ -z "$d" ]; then
+      if [[ -z "$a" ]] || [[ -z "$b" ]] || [[ -z "$c" ]] || [[ -z "$d" ]]; then
         echo "'${servername}' is malformed. Should be a IP address"
       else
         domain=$c.$b.$a.in-addr.arpa
         servername=$d
-        if [ ! -f ${basedir}/${domain}.yml ]; then
+        if [[ ! -f ${basedir}/${domain}.yml ]]; then
           echo "${domain}.yml does not exist"
           exit 1 
         else
