@@ -1,4 +1,4 @@
-## Setup and manage BIND9 zone files via Ansible
+## Setup and manage BIND9 zone files with Ansible
 
 **Method:**
 
